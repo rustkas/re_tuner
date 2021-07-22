@@ -4,7 +4,7 @@
 
 -module(re_tuner).
 
--export([tune/1]).
+-export([tune/1,avoid_characters/0]).
 
 %% @doc Replace Regex pattern to more siple one.
 %% @returns Transformed Regex pattern.
