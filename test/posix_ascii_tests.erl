@@ -10,7 +10,7 @@
 -import(eunit_helper, [check_all_by_regex/3]).
 
 get_valid_character_list() ->
-    ValidCharacterList =         lists:seq(0, 127),
+    ValidCharacterList = lists:seq(0, 127),
     ValidCharacterList.
 
 research_01_test() ->
@@ -21,6 +21,5 @@ research_01_test() ->
     {ok, MP} = re:compile(TunedRegularExpression),
     Result = check_all_by_regex(MP, ValidCharacterList, true),
     ?assertEqual(Expected, Result).
-
 
 -endif.

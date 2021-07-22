@@ -10,7 +10,7 @@
 -import(eunit_helper, [check_all_by_regex/3]).
 
 get_valid_character_list() ->
-    ValidCharacterList =  lists:seq(9, 13) ++ [32],
+    ValidCharacterList = lists:seq(9, 13) ++ [32],
     ValidCharacterList.
 
 research_01_test() ->

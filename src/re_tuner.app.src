@@ -1,14 +1,10 @@
-{application, re_tuner,
- [{description, "Library for tuning Regular Expressions string"},
-  {vsn, "0.1.0"},
-  {registered, []},
-  {applications,
-   [kernel,
-    stdlib
-   ]},
-  {env,[]},
-  {modules, []},
-  {licenses, ["MIT License"]},
-  {links,[{"Github","https://github.com/rustkas/re_tuner"}]},
-  {files,["src","rebar.config","README.md","LICENSE"]}
- ]}.
+{application,re_tuner,
+             [{description,"Library for tuning Regular Expressions string"},
+              {vsn,"0.1.1"},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {env,[]},
+              {modules,[]},
+              {licenses,["MIT License"]},
+              {links,[{"Github","https://github.com/rustkas/re_tuner"}]},
+              {files,["src","rebar.config","README.md","LICENSE"]}]}.
