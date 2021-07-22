@@ -54,7 +54,7 @@ tune("[[:^upper:]]") ->
 tune("[[:digit:]]") ->
     "[\\x30-\\x39]";
 tune("[[:^digit:]]") ->
-    "[\\0-\\x29\\x40-\\x7F]";
+    "[\\0-\\x29\\x3A-\\x7F]";
 
 % Posix [[:graph:]]
 tune("[[:graph:]]") ->
@@ -74,7 +74,17 @@ tune("[[:punct:]]") ->
 tune("[[:^punct:]]") ->
     "[\\0-\\x20\\x30-\\x39\\x41-\\x5A\\x61-\\x7A\\x7F]";	
 
+% Posix [[:space:]]
+tune("[[:space:]]") ->
+    "[\\x9-\\xD\\x20]";	
+tune("[[:^space:]]") ->
+    "[\\0-\\x8\\xE-\\x1F\\x21-\\x7F]";
 
+% Posix [[:cntrl:]]
+tune("[[:cntrl:]]") ->
+    "[\\0-\\x1F]";	
+tune("[[:^cntrl:]]") ->
+    "[\\x20-\\x7F]";
 	
 % Posix [[:ascii:]]
 tune("[[:ascii:]]") ->

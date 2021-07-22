@@ -30,6 +30,8 @@ EUnit
 	$ rebar3 eunit -m posix_graph_tests
     $ rebar3 eunit -m posix_print_tests
 	$ rebar3 eunit -m posix_punct_tests
+    $ rebar3 eunit -m posix_space_tests
+	$ rebar3 eunit -m posix_cntrl_tests
 	$ rebar3 eunit -m posix_ascii_tests
 
 
@@ -52,4 +54,5 @@ hex.pm Publish documentation
 	
 Make several commands one by one
 -----	
-    $ rebar3 do hex cut -i patch, hex publish --yes, hex docs	
+    $ rebar3 do hex cut -i patch
+	$ rebar3 do hex publish --yes, hex docs
