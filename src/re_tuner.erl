@@ -4,7 +4,7 @@
 
 -module(re_tuner).
 
--export([tune/1,avoid_characters/0]).
+-export([tune/1, avoid_characters/0, save_pattern/1]).
 
 %% @doc Replace Regex pattern to more siple one.
 %% @returns Transformed Regex pattern.
@@ -93,3 +93,12 @@ tune("[[:ascii:]]") ->
 -spec avoid_characters() -> Result when Result :: string().
 avoid_characters() ->
     "*.^$|{}]\-".
+
+%% @doc Make save Regex pattern which make literal for any character.
+%% @returns Save pattern
+
+-spec save_pattern(Pattern) -> SavePattern
+    when Pattern :: string(),
+         SavePattern :: string().
+save_pattern(Pattern) ->
+    "\\Q" ++ Pattern ++ "\\E".
