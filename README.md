@@ -21,7 +21,8 @@ Build
 EUnit
 -----
 
-    $ rebar3 eunit -m shorthands_hs_tests
+    $ rebar3 eunit -m shorthands_s_tests
+	$ rebar3 eunit -m shorthands_w_tests
     $ rebar3 eunit -m shorthands_v_tests
 	$ rebar3 eunit -m posix_alnum_tests
 	$ rebar3 eunit -m posix_lower_tests
