@@ -34,6 +34,7 @@ EUnit
     $ rebar3 eunit -m posix_space_tests
 	$ rebar3 eunit -m posix_cntrl_tests
 	$ rebar3 eunit -m posix_ascii_tests
+	$ rebar3 eunit -m replace_tests
 
 
 EDoc
@@ -55,5 +56,5 @@ hex.pm Publish documentation
 	
 Make several commands one by one
 -----	
-    $ rebar3 do hex cut -i patch
+    $ rebar3 do hex cut -i patch --yes
 	$ rebar3 do hex publish --yes, edoc, hex docs

@@ -4,7 +4,7 @@
 
 -module(re_tuner).
 
--export([tune/1, avoid_characters/0, save_pattern/1]).
+-export([tune/1, avoid_characters/0, save_pattern/1, replace/1]).
 
 %% @doc Replace Regex pattern to more siple one.
 %% @returns Transformed Regex pattern.
@@ -23,7 +23,7 @@ tune("\\w") ->
     "[0-9_a-zA-Z]";
 % [^\w]
 tune("[^\\w]") ->
-    "[^0-9_a-zA-Z]";	
+    "[^0-9_a-zA-Z]";
 % \h
 tune("\\h") ->
     "[\\x9,\\x20]";
@@ -108,3 +108,94 @@ avoid_characters() ->
          SavePattern :: string().
 save_pattern(Pattern) ->
     "\\Q" ++ Pattern ++ "\\E".
+
+%% @doc Replace one of shorthand pattern from the list `[\s,\w,\h,v]'
+%% in a pattern string.
+%% @param Pattern searched regex pattern for replacing
+%% @returns Updated Regex pattern string
+
+-spec replace(Pattern) -> UpdatedPattern
+    when Pattern :: string(),
+         UpdatedPattern :: string().
+replace(Pattern) ->
+    CheckedShorthandsPlus =
+        [% \s
+         {"\\x{5c}s(?=\\+)", "[ \\\\t\\\\n\\\\r]"},
+         % \w
+         {"\\x{5c}w(?=\\+)", "[0-9_a-zA-Z]"},
+         % \h
+         {"\\x{5c}h(?=\\+)", "[\\\\x9\\\\x20]"},
+         % \v
+         {"\\x{5c}v(?=\\+)", "[\\\\xA-\\\\xD]"}],
+
+    UpdatedPatternPlus =
+        lists:foldl(fun(Elem, Acc) ->
+                       Regex = element(1, Elem),
+                       Markup = element(2, Elem),
+                       NewContent = re:replace(Acc, Regex, Markup, [global, {return, list}]),
+                       NewContent
+                    end,
+                    Pattern,
+                    CheckedShorthandsPlus),
+
+    CheckedShorthandsQuestionMark =
+        [% \s
+         {"\\x{5c}s(?=\\?)", "[ \\\\t\\\\n\\\\r]"},
+         % \w
+         {"\\x{5c}w(?=\\?)", "[0-9_a-zA-Z]"},
+         % \h
+         {"\\x{5c}h(?=\\?)", "[\\\\x9\\\\x20]"},
+         % \v
+         {"\\x{5c}v(?=\\?)", "[\\\\xA-\\\\xD]"}],
+
+    UpdatedPatternQuestionMark =
+        lists:foldl(fun(Elem, Acc) ->
+                       Regex = element(1, Elem),
+                       Markup = element(2, Elem),
+                       NewContent = re:replace(Acc, Regex, Markup, [global, {return, list}]),
+                       NewContent
+                    end,
+                    UpdatedPatternPlus,
+                    CheckedShorthandsQuestionMark),
+
+    CheckedShorthandsAsterisk =
+        [% \s
+         {"\\x{5c}s(?=\\*)", "[ \\\\t\\\\n\\\\r]"},
+         % \w
+         {"\\x{5c}w(?=\\*)", "[0-9_a-zA-Z]"},
+         % \h
+         {"\\x{5c}h(?=\\*)", "[\\\\x9\\\\x20]"},
+         % \v
+         {"\\x{5c}v(?=\\*)", "[\\\\xA-\\\\xD]"}],
+
+    UpdatedPatternAsterisk =
+        lists:foldl(fun(Elem, Acc) ->
+                       Regex = element(1, Elem),
+                       Markup = element(2, Elem),
+                       NewContent = re:replace(Acc, Regex, Markup, [global, {return, list}]),
+                       NewContent
+                    end,
+                    UpdatedPatternQuestionMark,
+                    CheckedShorthandsAsterisk),
+
+    CheckedShorthands =
+        [% \s
+         {"\\x{5c}s", " \\\\t\\\\n\\\\r"},
+         % \w
+         {"\\x{5c}w", "0-9_a-zA-Z"},
+         % \h
+         {"\\x{5c}h", "\\\\x9\\\\x20"},
+         % \v
+         {"\\x{5c}v", "\\\\xA-\\\\xD"}],
+
+    UpdatedPattern =
+        lists:foldl(fun(Elem, Acc) ->
+                       Regex = element(1, Elem),
+                       Markup = element(2, Elem),
+                       NewContent = re:replace(Acc, Regex, Markup, [global, {return, list}]),
+                       NewContent
+                    end,
+                    UpdatedPatternAsterisk,
+                    CheckedShorthands),
+
+    UpdatedPattern.

@@ -18,6 +18,8 @@
 <h2><a name="description">Description</a></h2>Helper function for working with Regular Expression Erlanb re module.
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
+<tr><td valign="top"><a href="#replace-1">replace/1</a></td><td>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
+  in a pattern string.</td></tr>
 <tr><td valign="top"><a href="#save_pattern-1">save_pattern/1</a></td><td>Make save Regex pattern which make literal for any character.</td></tr>
 <tr><td valign="top"><a href="#tune-1">tune/1</a></td><td>Replace Regex pattern to more siple one.</td></tr>
 </table>
@@ -31,6 +33,16 @@
 <p> </p>
 <p>returns: The list of spectial characters.</p>
 </div><p>The list of characters which raise an error if escape character is not used.</p>
+
+<h3 class="function"><a name="replace-1">replace/1</a></h3>
+<div class="spec">
+<p><tt>replace(Pattern) -&gt; UpdatedPattern</tt>
+<ul class="definitions"><li><tt>Pattern = string()</tt></li><li><tt>UpdatedPattern = string()</tt></li></ul></p>
+<p><tt>Pattern</tt>: searched regex pattern for replacing<br>
+</p>
+<p>returns: Updated Regex pattern string</p>
+</div><p>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
+  in a pattern string.</p>
 
 <h3 class="function"><a name="save_pattern-1">save_pattern/1</a></h3>
 <div class="spec">
