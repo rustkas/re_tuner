@@ -56,5 +56,5 @@ hex.pm Publish documentation
 	
 Make several commands one by one
 -----	
-    $ rebar3 do hex cut -i patch --yes
+    $ rebar3 do hex cut -i patch
 	$ rebar3 do hex publish --yes, edoc, hex docs
