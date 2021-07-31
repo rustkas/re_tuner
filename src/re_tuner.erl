@@ -4,7 +4,9 @@
 
 -module(re_tuner).
 
--export([tune/1, avoid_characters/0, save_pattern/1, replace/1]).
+-export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1]).
+
+-type mp() :: {re_pattern, term(), term(), term(), term()}.
 
 %% @doc Replace Regex pattern to more siple one.
 %% @returns Transformed Regex pattern.
@@ -199,3 +201,22 @@ replace(Pattern) ->
                     CheckedShorthands),
 
     UpdatedPattern.
+
+%% @doc It is reduced form of `re:compile/1' function.
+%% Return opaque data type containing a compiled regular expression or raise an error `badarg'.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#type-mp mp()].
+%% @param Regex regex pattern
+%% @returns Opaque data type containing a compiled regular expression
+
+-spec mp(Regex) -> MP | {error, badarg}
+    when Regex :: string(),
+         MP :: mp().
+mp(Regex) ->
+    case re:compile(Regex) of
+        {ok, MP} ->
+            MP;
+        {error, _ErrSpec} ->
+            error(badarg)
+    end.

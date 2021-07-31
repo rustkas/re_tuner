@@ -11,12 +11,10 @@ Create new library
 
     $ rebar3  new lib re_tuner
 	
-
 Build
 -----
 
     $ rebar3 compile
-
 
 EUnit
 -----
@@ -35,6 +33,7 @@ EUnit
 	$ rebar3 eunit -m posix_cntrl_tests
 	$ rebar3 eunit -m posix_ascii_tests
 	$ rebar3 eunit -m replace_tests
+	$ rebar3 eunit -m mp_tests
 
 
 EDoc
