@@ -10,14 +10,21 @@
 <hr>
 
 <h1>Module re_tuner</h1>
-<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Helper function for working with Regular Expression Erlanb re module.
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Helper function for working with Regular Expression Erlanb re module.
 <p>Copyright © 2021 by Anatolii Kosorukov</p>
 
 <p><b>Authors:</b> Anatolii Kosorukov (<a href="mailto:java1cprog@yandex.ru"><tt>java1cprog@yandex.ru</tt></a>) [<em>web site:</em> <tt><a href="rustkas.github.io/" target="_top">rustkas.github.io/</a></tt>].</p>
 
 <h2><a name="description">Description</a></h2>Helper function for working with Regular Expression Erlanb re module.
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-mp">mp()</a></h3>
+<p><tt>mp() = {re_pattern, term(), term(), term(), term()}</tt></p>
+
+
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
+<tr><td valign="top"><a href="#mp-1">mp/1</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#replace-1">replace/1</a></td><td>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
   in a pattern string.</td></tr>
 <tr><td valign="top"><a href="#save_pattern-1">save_pattern/1</a></td><td>Make save Regex pattern which make literal for any character.</td></tr>
@@ -33,6 +40,19 @@
 <p> </p>
 <p>returns: The list of spectial characters.</p>
 </div><p>The list of characters which raise an error if escape character is not used.</p>
+
+<h3 class="function"><a name="mp-1">mp/1</a></h3>
+<div class="spec">
+<p><tt>mp(Regex) -&gt; MP | {error, badarg}</tt>
+<ul class="definitions"><li><tt>Regex = string()</tt></li><li><tt>MP = <a href="#type-mp">mp()</a></tt></li></ul></p>
+<p><tt>Regex</tt>: regex pattern<br>
+</p>
+<p>returns: Opaque data type containing a compiled regular expression</p>
+</div><p>It is reduced form of <code>re:compile/1</code> function.
+  Return opaque data type containing a compiled regular expression or raise an error <code>badarg</code>.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#type-mp" target="_top">mp()</a>.</p>
 
 <h3 class="function"><a name="replace-1">replace/1</a></h3>
 <div class="spec">
