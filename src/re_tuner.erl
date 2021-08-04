@@ -4,9 +4,18 @@
 
 -module(re_tuner).
 
--export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1]).
+-export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
+
+-type nl_spec() :: cr | crlf | lf | anycrlf | any.
+
+-type compile_option() :: unicode | anchored | caseless | dollar_endonly | dotall |
+    extended | firstline | multiline | no_auto_capture |
+    dupnames | ungreedy |
+    {newline, nl_spec()} |
+    bsr_anycrlf | bsr_unicode | no_start_optimize | ucp |
+    never_utf.
 
 %% @doc Replace Regex pattern to more siple one.
 %% @returns Transformed Regex pattern.
@@ -215,6 +224,29 @@ replace(Pattern) ->
          MP :: mp().
 mp(Regex) ->
     case re:compile(Regex) of
+        {ok, MP} ->
+            MP;
+        {error, _ErrSpec} ->
+            error(badarg)
+    end.
+
+%% @doc It is reduced form of `re:compile/1' function.
+%% Return opaque data type containing a compiled regular expression or raise an error `badarg'.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#type-mp mp()].
+%% @param Regex regex pattern
+%% @param Options additional regular expression metadata
+%% @returns Opaque data type containing a compiled regular expression
+
+-spec mp(Regex,Options) -> MP | {error, badarg}
+    when Regex :: string(),
+	     Options :: [Option],
+         MP :: mp(),
+		 Option :: compile_option().
+		 
+mp(Regex,Options) ->
+    case re:compile(Regex,Options) of
         {ok, MP} ->
             MP;
         {error, _ErrSpec} ->
