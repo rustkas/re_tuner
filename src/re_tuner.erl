@@ -122,6 +122,8 @@ save_pattern(Pattern) ->
 
 %% @doc Replace one of shorthand pattern from the list `[\s,\w,\h,v]'
 %% in a pattern string.
+%% <br/>
+%% Don't apply `\w' shorthand to unicode content.
 %% @param Pattern searched regex pattern for replacing
 %% @returns Updated Regex pattern string
 
