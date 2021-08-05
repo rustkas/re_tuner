@@ -1,6 +1,6 @@
 {application,re_tuner,
              [{description,"Library for tuning Regular Expressions string"},
-              {vsn,"0.1.5"},
+              {vsn,"0.1.6"},
               {registered,[]},
               {applications,[kernel,stdlib]},
               {env,[]},
