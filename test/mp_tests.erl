@@ -7,7 +7,7 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
--import(re_tuner, [mp/1,mp/2]).
+-import(re_tuner, [mp/1, mp/2]).
 
 get_mp_01_test() ->
     Result = mp("[0-9]"),
@@ -18,8 +18,8 @@ get_mp_02_test() ->
     ?assertException(error, badarg, mp("[9-0]")).
 
 get_mp_03_test() ->
-    Result = mp("[a-z]",[caseless]),
-    {ok,MP} = re:compile("[a-z]",[caseless]),
-	?assertEqual(MP,Result).
+    Result = mp("[a-z]", [caseless]),
+    {ok, MP} = re:compile("[a-z]", [caseless]),
+    ?assertEqual(MP, Result).
 
 -endif.
