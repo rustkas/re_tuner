@@ -265,10 +265,11 @@ mp(Regex, Options) ->
             error(badarg)
     end.
 
-%% The Unicode character database divides all the code points into blocks. Each block
+%% @doc The Unicode character database divides all the code points into blocks. Each block
 %% consists of a single range of code points. The code points U+0000 through U+FFFF
 %% are divided into 156 blocks in version 6.1 of the Unicode standard.
-%%
+%% <br/>
+%% ```
 %% ‹U+0000…U+007F \p{InBasicLatin}›
 %% ‹U+0080…U+00FF \p{InLatin-1Supplement}›
 %% ‹U+0100…U+017F \p{InLatinExtended-A}›
@@ -425,6 +426,7 @@ mp(Regex, Options) ->
 %% ‹U+FE70…U+FEFF \p{InArabicPresentationForms-B}›
 %% ‹U+FF00…U+FFEF \p{InHalfwidthandFullwidthForms}›
 %% ‹U+FFF0…U+FFFF \p{InSpecials}›
+%% '''
 %%
 %% @param BlockName is Regular Expression block name
 %% @returns Regular Expressions range of code points
