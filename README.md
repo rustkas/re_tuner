@@ -35,6 +35,7 @@ EUnit
 	$ rebar3 eunit -m replace_tests
 	$ rebar3 eunit -m mp_tests
 	$ rebar3 eunit -m unicode_block_tests
+	$ rebar3 eunit -m is_match_tests
 
 
 EDoc
