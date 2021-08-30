@@ -610,7 +610,7 @@ is_match(Text, MP)  when is_tuple(MP) ->
 	Result.
 	
 %% @doc Check whether a string fits a certain pattern in its entirety. 
-%% A partial match is sufficient. 
+%% A partial match is not sufficient. 
 %% <br/>
 %% <b>See also:</b>
 %% [http://erlang.org/doc/man/re.html#compile_2].
