@@ -581,7 +581,7 @@ unicode_block(BlockName) ->
         end,
     Result.
 
-%% @doc check whether a match can be found for a particular regular expression in a particular string. 
+%% @doc Check whether a match can be found for a particular regular expression in a particular string. 
 %% A partial match is sufficient. 
 %% <br/>
 %% <b>See also:</b>
