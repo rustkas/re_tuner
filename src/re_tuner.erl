@@ -5,7 +5,7 @@
 -module(re_tuner).
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
-         unicode_block/1, is_match/2]).
+         unicode_block/1, is_match/2, is_full_match/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -608,3 +608,31 @@ is_match(Text, MP)  when is_tuple(MP) ->
 	MatchResult = re:run(Text, MP, [{capture,none}]),
 	Result = (MatchResult == match),
 	Result.
+	
+%% @doc Check whether a string fits a certain pattern in its entirety. 
+%% A partial match is sufficient. 
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#compile_2].
+%% @param Text regex pattern
+%% @param Regex regex pattern
+%% @param MP compiled a regular expression
+%% @returns true or false
+
+-spec is_full_match(Text, ReInput) -> Result
+    when Text :: string(),
+	     ReInput :: string() | tuple(),
+         Result :: true | false.
+		 
+is_full_match(Text, Regex) when is_list(Regex) ->
+   try 
+      MP = re_tuner:mp("\\A" ++ Regex ++ "\\Z"),
+	  is_match(Text, MP)  
+   catch
+      error:_Error -> false
+   end;
+
+is_full_match(Text, MP)  when is_tuple(MP) ->
+	MatchResult = re:run(Text, MP, [{capture,none}]),
+	Result = (MatchResult == match),
+	Result.	
