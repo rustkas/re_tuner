@@ -601,7 +601,7 @@ is_match(Text, Regex) when is_list(Regex) ->
       MP = re_tuner:mp(Regex),
 	  is_match(Text, MP)  
    catch
-      error:Error -> false
+      _Error -> false
    end;
 
 is_match(Text, MP)  when is_tuple(MP) ->
