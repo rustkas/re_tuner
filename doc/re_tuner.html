@@ -32,6 +32,7 @@
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
+<tr><td valign="top"><a href="#is_full_match-2">is_full_match/2</a></td><td>Check whether a string fits a certain pattern in its entirety.</td></tr>
 <tr><td valign="top"><a href="#is_match-2">is_match/2</a></td><td>Check whether a match can be found for a particular regular expression in a particular string.</td></tr>
 <tr><td valign="top"><a href="#mp-1">mp/1</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#mp-2">mp/2</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
@@ -51,6 +52,19 @@
 <p> </p>
 <p>returns: The list of spectial characters.</p>
 </div><p>The list of characters which raise an error if escape character is not used.</p>
+
+<h3 class="function"><a name="is_full_match-2">is_full_match/2</a></h3>
+<div class="spec">
+<p><tt>is_full_match(Text, ReInput) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = true | false</tt></li></ul></p>
+<p><tt>Text</tt>: regex pattern<br>
+</p>
+<p>returns: true or false</p>
+</div><p>Check whether a string fits a certain pattern in its entirety.
+  A partial match is sufficient.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#compile_2" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_2</tt></a>.</p>
 
 <h3 class="function"><a name="is_match-2">is_match/2</a></h3>
 <div class="spec">
