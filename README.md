@@ -59,3 +59,4 @@ Make several commands one by one
 -----	
     $ rebar3 do hex cut -i patch
 	$ rebar3 do hex publish --yes, edoc, hex docs
+	$ rebar3 do hex publish --yes --replace, edoc, hex docs
