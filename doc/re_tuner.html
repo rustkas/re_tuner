@@ -34,6 +34,7 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
 <tr><td valign="top"><a href="#first_match-2">first_match/2</a></td><td>Retrieve the Matched Text.</td></tr>
 <tr><td valign="top"><a href="#first_match_info-2">first_match_info/2</a></td><td>Determine the Position and Length of the Match.</td></tr>
+<tr><td valign="top"><a href="#first_part_match-2">first_part_match/2</a></td><td>Retrieve Part of the Matched Text.</td></tr>
 <tr><td valign="top"><a href="#is_full_match-2">is_full_match/2</a></td><td>Check whether a string fits a certain pattern in its entirety.</td></tr>
 <tr><td valign="top"><a href="#is_match-2">is_match/2</a></td><td>Check whether a match can be found for a particular regular expression in a particular string.</td></tr>
 <tr><td valign="top"><a href="#mp-1">mp/1</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
@@ -61,7 +62,7 @@
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
 <p><tt>Text</tt>: regex pattern<br>
 </p>
-<p>returns: String result</p>
+<p>returns: A string as a result</p>
 </div><p>Retrieve the Matched Text.
   You have a regular expression that matches a part of the subject text, and you want to
   extract the text that was matched. If the regular expression can match the string more
@@ -73,13 +74,32 @@
 
 <h3 class="function"><a name="first_match_info-2">first_match_info/2</a></h3>
 <div class="spec">
-<p><tt>first_match_info(Text, Regex) -&gt; any()</tt></p>
-<p> </p>
+<p><tt>first_match_info(Text, ReInput) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
+<p><tt>Text</tt>: regex pattern<br>
+</p>
+<p>returns: Tuples as a result</p>
 </div><p>Determine the Position and Length of the Match.
   Instead of extracting the substring matched by the regular expression you want to determine
   the starting position and length of the match.
   With this information, you can extract the match in your own code or apply whatever
   processing you fancy on the part of the original string matched by the regex.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
+  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+
+<h3 class="function"><a name="first_part_match-2">first_part_match/2</a></h3>
+<div class="spec">
+<p><tt>first_part_match(Text, ReInput) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
+<p><tt>Text</tt>: regex pattern<br>
+</p>
+<p>returns: A string as a result</p>
+</div><p>Retrieve Part of the Matched Text.
+  You have a regular expression that matches a substring of the subject text.
+  You want to match just one part of that substring. To isolate the part
+  you want, you added a capturing group to your regular expression.
   <br>
   <b>See also:</b>
   <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,

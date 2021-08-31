@@ -5,7 +5,8 @@
 -module(re_tuner).
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
-         unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2]).
+         unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2,
+		 first_part_match/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -648,7 +649,7 @@ is_full_match(Text, MP)  when is_tuple(MP) ->
 %% @param Text regex pattern
 %% @param Regex regex pattern
 %% @param MP compiled a regular expression
-%% @returns String result
+%% @returns A string as a result
 
 -spec first_match(Text, ReInput) -> Result
     when Text :: string(),
@@ -680,6 +681,11 @@ first_match(Text, MP) when is_tuple(MP) ->
 %% @param MP compiled a regular expression
 %% @returns Tuples as a result
 
+-spec first_match_info(Text, ReInput) -> Result
+    when Text :: string(),
+	     ReInput :: string() | tuple(),
+         Result :: string()|nomatch.
+
 first_match_info(Text,Regex) when is_list(Regex) ->
     MP = re_tuner:mp(Regex),
 	Result = first_match_info(Text, MP),
@@ -690,4 +696,32 @@ first_match_info(Text, MP) when is_tuple(MP) ->
 		nomatch -> nomatch
 	end,
 	Result.
-	
+
+%% @doc Retrieve Part of the Matched Text.
+%% You have a regular expression that matches a substring of the subject text. 
+%% You want to match just one part of that substring. To isolate the part
+%% you want, you added a capturing group to your regular expression.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#compile_1],
+%% [http://erlang.org/doc/man/re.html#run_2].
+%% @param Text regex pattern
+%% @param Regex regex pattern
+%% @param MP compiled a regular expression
+%% @returns A string as a result
+
+-spec first_part_match(Text, ReInput) -> Result
+    when Text :: string(),
+	     ReInput :: string() | tuple(),
+         Result :: string()|nomatch.
+
+first_part_match(Text,Regex) when is_list(Regex) ->
+    MP = re_tuner:mp(Regex),
+	Result = first_part_match(Text, MP),
+	Result;
+first_part_match(Text, MP) when is_tuple(MP) ->
+	Result = case re:run(Text, MP, [{capture, [1], list}]) of 
+	    {match, [RunResult]} -> RunResult;
+		nomatch -> nomatch
+	end,	
+	Result.

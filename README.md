@@ -39,6 +39,7 @@ EUnit
 	$ rebar3 eunit -m is_full_match_tests
 	$ rebar3 eunit -m first_match_tests
 	$ rebar3 eunit -m first_match_info_tests
+	$ rebar3 eunit -m first_part_match_tests
 
 
 EDoc
