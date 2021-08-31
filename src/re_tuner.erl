@@ -6,7 +6,7 @@
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
          unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2,
-		 first_part_match/2,all_match/2]).
+		 first_part_match/2,all_match/2, filter/3]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -753,5 +753,37 @@ all_match(Text, MP) when is_tuple(MP) ->
 	Result = case re:run(Text, MP, [global,{capture,first,list}]) of 
 	    {match, MatchResult} -> lists:map(fun(Elem)-> hd(Elem) end, MatchResult);
 		nomatch -> nomatch
+	end,	
+	Result.	
+
+%% @doc Filter Matches in Procedural Code.
+%% Retrieve a list of all matches a regular expression can find in a string when it is 
+%% applied repeatedly to the remainder of the string after each match. Get a list of 
+%% matches that meet certain extra criteria that you cannot (easily) express in 
+%% a regular expression.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#compile_1],
+%% [http://erlang.org/doc/man/re.html#run_2].
+%% @param Text regex pattern
+%% @param Regex regex pattern
+%% @param MP compiled a regular expression
+%% @param Function filter function
+%% @returns A list as a results
+
+-spec filter(Text,ReInput,Function) -> Result
+    when Text :: string(),
+	     ReInput :: string() | tuple(),
+		 Function :: function(),
+         Result :: [string()]|nomatch.
+	
+filter(Text,Regex,Function) when is_list(Regex) ->
+    MP = re_tuner:mp(Regex),
+	Result = filter(Text, MP,Function),
+	Result;
+filter(Text, MP,Function) when is_tuple(MP) ->
+	Result = case re_tuner:all_match(Text,MP) of 
+	    nomatch -> nomatch;
+		MatchResult -> lists:filter(Function, MatchResult)
 	end,	
 	Result.	

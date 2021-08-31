@@ -33,6 +33,7 @@
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#all_match-2">all_match/2</a></td><td>Retrieve Part of the Matched Text.</td></tr>
 <tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
+<tr><td valign="top"><a href="#filter-3">filter/3</a></td><td>Filter Matches in Procedural Code.</td></tr>
 <tr><td valign="top"><a href="#first_match-2">first_match/2</a></td><td>Retrieve the Matched Text.</td></tr>
 <tr><td valign="top"><a href="#first_match_info-2">first_match_info/2</a></td><td>Determine the Position and Length of the Match.</td></tr>
 <tr><td valign="top"><a href="#first_part_match-2">first_part_match/2</a></td><td>Retrieve Part of the Matched Text.</td></tr>
@@ -72,6 +73,24 @@
 <p> </p>
 <p>returns: The list of spectial characters.</p>
 </div><p>The list of characters which raise an error if escape character is not used.</p>
+
+<h3 class="function"><a name="filter-3">filter/3</a></h3>
+<div class="spec">
+<p><tt>filter(Text, ReInput, Function) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Function = function()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
+<p><tt>Text</tt>: regex pattern<br>
+<tt>Function</tt>: filter function<br>
+</p>
+<p>returns: A list as a results</p>
+</div><p>Filter Matches in Procedural Code.
+  Retrieve a list of all matches a regular expression can find in a string when it is
+  applied repeatedly to the remainder of the string after each match. Get a list of
+  matches that meet certain extra criteria that you cannot (easily) express in
+  a regular expression.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
+  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
 
 <h3 class="function"><a name="first_match-2">first_match/2</a></h3>
 <div class="spec">
