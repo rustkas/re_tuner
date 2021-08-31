@@ -6,7 +6,7 @@
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
          unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2,
-		 first_part_match/2]).
+		 first_part_match/2,all_match/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -725,3 +725,33 @@ first_part_match(Text, MP) when is_tuple(MP) ->
 		nomatch -> nomatch
 	end,	
 	Result.
+	
+%% @doc Retrieve Part of the Matched Text.
+%% You have a regular expression that matches a substring of the subject text. 
+%% You want to match just one part of that substring. To isolate the part
+%% you want, you added a capturing group to your regular expression.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#compile_1],
+%% [http://erlang.org/doc/man/re.html#run_2].
+%% @param Text regex pattern
+%% @param Regex regex pattern
+%% @param MP compiled a regular expression
+%% @returns A list as a results
+
+-spec all_match(Text, ReInput) -> Result
+    when Text :: string(),
+	     ReInput :: string() | tuple(),
+         Result :: [string()]|nomatch.
+
+
+all_match(Text,Regex) when is_list(Regex) ->
+    MP = re_tuner:mp(Regex),
+	Result = all_match(Text, MP),
+	Result;
+all_match(Text, MP) when is_tuple(MP) ->
+	Result = case re:run(Text, MP, [global,{capture,first,list}]) of 
+	    {match, MatchResult} -> lists:map(fun(Elem)-> hd(Elem) end, MatchResult);
+		nomatch -> nomatch
+	end,	
+	Result.	

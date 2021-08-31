@@ -31,7 +31,8 @@
 
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#all_match-2">all_match/2</a></td><td>Retrieve Part of the Matched Text.</td></tr>
+<tr><td valign="top"><a href="#avoid_characters-0">avoid_characters/0</a></td><td>The list of characters which raise an error if escape character is not used.</td></tr>
 <tr><td valign="top"><a href="#first_match-2">first_match/2</a></td><td>Retrieve the Matched Text.</td></tr>
 <tr><td valign="top"><a href="#first_match_info-2">first_match_info/2</a></td><td>Determine the Position and Length of the Match.</td></tr>
 <tr><td valign="top"><a href="#first_part_match-2">first_part_match/2</a></td><td>Retrieve Part of the Matched Text.</td></tr>
@@ -47,6 +48,22 @@
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="all_match-2">all_match/2</a></h3>
+<div class="spec">
+<p><tt>all_match(Text, ReInput) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
+<p><tt>Text</tt>: regex pattern<br>
+</p>
+<p>returns: A list as a results</p>
+</div><p>Retrieve Part of the Matched Text.
+  You have a regular expression that matches a substring of the subject text.
+  You want to match just one part of that substring. To isolate the part
+  you want, you added a capturing group to your regular expression.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
+  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
 
 <h3 class="function"><a name="avoid_characters-0">avoid_characters/0</a></h3>
 <div class="spec">
