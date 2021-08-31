@@ -37,6 +37,7 @@ EUnit
 	$ rebar3 eunit -m unicode_block_tests
 	$ rebar3 eunit -m is_match_tests
 	$ rebar3 eunit -m is_full_match_tests
+	$ rebar3 eunit -m first_match_tests
 
 
 EDoc
@@ -58,6 +59,8 @@ hex.pm Publish documentation
 	
 Make several commands one by one
 -----	
-    $ rebar3 do hex cut -i patch
-	$ rebar3 do hex publish --yes, edoc, hex docs
+    $ rebar3 edoc
+	$ rebar3 do hex cut -i patch
+	$ rebar3 do hex publish --yes, hex docs
 	$ rebar3 do hex publish --yes --replace, edoc, hex docs
+	

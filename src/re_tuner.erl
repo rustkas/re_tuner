@@ -5,7 +5,7 @@
 -module(re_tuner).
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
-         unicode_block/1, is_match/2, is_full_match/2]).
+         unicode_block/1, is_match/2, is_full_match/2,first_match/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -585,7 +585,7 @@ unicode_block(BlockName) ->
 %% A partial match is sufficient. 
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_2].
+%% [http://erlang.org/doc/man/re.html#compile_1].
 %% @param Text regex pattern
 %% @param Regex regex pattern
 %% @param MP compiled a regular expression
@@ -608,12 +608,12 @@ is_match(Text, MP)  when is_tuple(MP) ->
 	MatchResult = re:run(Text, MP, [{capture,none}]),
 	Result = (MatchResult == match),
 	Result.
-	
+
 %% @doc Check whether a string fits a certain pattern in its entirety. 
 %% A partial match is not sufficient. 
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_2].
+%% [http://erlang.org/doc/man/re.html#compile_1].
 %% @param Text regex pattern
 %% @param Regex regex pattern
 %% @param MP compiled a regular expression
@@ -635,4 +635,33 @@ is_full_match(Text, Regex) when is_list(Regex) ->
 is_full_match(Text, MP)  when is_tuple(MP) ->
 	MatchResult = re:run(Text, MP, [{capture,none}]),
 	Result = (MatchResult == match),
+	Result.	
+
+%% @doc Retrieve the Matched Text.
+%% You have a regular expression that matches a part of the subject text, and you want to
+%% extract the text that was matched. If the regular expression can match the string more
+%% than once, you want only the first match.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#compile_1],
+%% [http://erlang.org/doc/man/re.html#run_2].
+%% @param Text regex pattern
+%% @param Regex regex pattern
+%% @param MP compiled a regular expression
+%% @returns String result
+
+-spec first_match(Text, ReInput) -> Result
+    when Text :: string(),
+	     ReInput :: string() | tuple(),
+         Result :: string()|nomatch.
+		 
+first_match(Text,Regex) when is_list(Regex) ->
+    MP = re_tuner:mp(Regex),
+	Result = first_match(Text, MP),
+	Result;
+first_match(Text, MP) when is_tuple(MP) ->
+	Result = case re:run(Text, MP, [{capture, first, list}]) of 
+	    {match, [RunResult]} -> RunResult;
+		nomatch -> nomatch
+	end,	
 	Result.	
