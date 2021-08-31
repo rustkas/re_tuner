@@ -5,7 +5,7 @@
 -module(re_tuner).
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
-         unicode_block/1, is_match/2, is_full_match/2,first_match/2]).
+         unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -665,3 +665,29 @@ first_match(Text, MP) when is_tuple(MP) ->
 		nomatch -> nomatch
 	end,	
 	Result.	
+
+%% @doc Determine the Position and Length of the Match.
+%% Instead of extracting the substring matched by the regular expression you want to determine 
+%% the starting position and length of the match.
+%% With this information, you can extract the match in your own code or apply whatever
+%% processing you fancy on the part of the original string matched by the regex.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#compile_1],
+%% [http://erlang.org/doc/man/re.html#run_2].
+%% @param Text regex pattern
+%% @param Regex regex pattern
+%% @param MP compiled a regular expression
+%% @returns Tuples as a result
+
+first_match_info(Text,Regex) when is_list(Regex) ->
+    MP = re_tuner:mp(Regex),
+	Result = first_match_info(Text, MP),
+	Result;
+first_match_info(Text, MP) when is_tuple(MP) ->
+	Result = case re:run(Text, MP, [{capture, first, index}]) of 
+	    {match, [RunResult]} -> RunResult;
+		nomatch -> nomatch
+	end,
+	Result.
+	
