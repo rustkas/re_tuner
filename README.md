@@ -1,6 +1,6 @@
 # re_tuner
 
-Library for tuning Regular Expressions string for [re](http://erlang.org/doc/man/re.html) module.
+Erlang library for tuning Regular Expressions string for [re](http://erlang.org/doc/man/re.html) module.
 
 ====================
 
