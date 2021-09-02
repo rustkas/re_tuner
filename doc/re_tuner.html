@@ -44,6 +44,7 @@
 <tr><td valign="top"><a href="#replace-1">replace/1</a></td><td>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
   in a pattern string.</td></tr>
 <tr><td valign="top"><a href="#save_pattern-1">save_pattern/1</a></td><td>Make save Regex pattern which make literal for any character.</td></tr>
+<tr><td valign="top"><a href="#subfilter-3">subfilter/3</a></td><td>Filter a match within another match.</td></tr>
 <tr><td valign="top"><a href="#tune-1">tune/1</a></td><td>Replace Regex pattern to more siple one.</td></tr>
 <tr><td valign="top"><a href="#unicode_block-1">unicode_block/1</a></td><td>The Unicode character database divides all the code points into blocks.</td></tr>
 </table>
@@ -54,9 +55,9 @@
 <div class="spec">
 <p><tt>all_match(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
+<p><tt>Text</tt>: subject string<br>
 </p>
-<p>returns: A list as a results</p>
+<p>returns: A list</p>
 </div><p>Retrieve Part of the Matched Text.
   You have a regular expression that matches a substring of the subject text.
   You want to match just one part of that substring. To isolate the part
@@ -78,10 +79,10 @@
 <div class="spec">
 <p><tt>filter(Text, ReInput, Function) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Function = function()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
+<p><tt>Text</tt>: subject string<br>
 <tt>Function</tt>: filter function<br>
 </p>
-<p>returns: A list as a results</p>
+<p>returns: A list</p>
 </div><p>Filter Matches in Procedural Code.
   Retrieve a list of all matches a regular expression can find in a string when it is
   applied repeatedly to the remainder of the string after each match. Get a list of
@@ -96,7 +97,7 @@
 <div class="spec">
 <p><tt>first_match(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
+<p><tt>Text</tt>: subject string<br>
 </p>
 <p>returns: A string as a result</p>
 </div><p>Retrieve the Matched Text.
@@ -112,7 +113,7 @@
 <div class="spec">
 <p><tt>first_match_info(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
+<p><tt>Text</tt>: subject string<br>
 </p>
 <p>returns: Tuples as a result</p>
 </div><p>Determine the Position and Length of the Match.
@@ -129,9 +130,8 @@
 <div class="spec">
 <p><tt>first_part_match(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
-</p>
-<p>returns: A string as a result</p>
+<p> </p>
+<p>returns: A string</p>
 </div><p>Retrieve Part of the Matched Text.
   You have a regular expression that matches a substring of the subject text.
   You want to match just one part of that substring. To isolate the part
@@ -145,7 +145,7 @@
 <div class="spec">
 <p><tt>is_full_match(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = true | false</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
+<p><tt>Text</tt>: subject string<br>
 </p>
 <p>returns: true or false</p>
 </div><p>Check whether a string fits a certain pattern in its entirety.
@@ -158,7 +158,7 @@
 <div class="spec">
 <p><tt>is_match(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = true | false</tt></li></ul></p>
-<p><tt>Text</tt>: regex pattern<br>
+<p><tt>Text</tt>: subject string<br>
 </p>
 <p>returns: true or false</p>
 </div><p>Check whether a match can be found for a particular regular expression in a particular string.
@@ -213,6 +213,22 @@
 <p> </p>
 <p>returns: Save pattern</p>
 </div><p>Make save Regex pattern which make literal for any character.</p>
+
+<h3 class="function"><a name="subfilter-3">subfilter/3</a></h3>
+<div class="spec">
+<p><tt>subfilter(Text, ReInput, Function) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Function = function()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
+<p><tt>Text</tt>: subject string<br>
+</p>
+<p>returns: A list</p>
+</div><p>Filter a match within another match.
+  Find all the matches of a particular regular expression, but only within
+  certain sections of the subject string. Another regular expression matches each of the
+  sections in the string.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
+  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
 
 <h3 class="function"><a name="tune-1">tune/1</a></h3>
 <div class="spec">

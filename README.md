@@ -42,6 +42,7 @@ EUnit
 	$ rebar3 eunit -m first_part_match_tests
 	$ rebar3 eunit -m all_match_tests
 	$ rebar3 eunit -m filter_tests
+	$ rebar3 eunit -m subfilter_tests
 
 
 EDoc
