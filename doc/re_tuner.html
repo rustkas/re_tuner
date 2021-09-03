@@ -44,6 +44,7 @@
 <tr><td valign="top"><a href="#mp-2">mp/2</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#replace-1">replace/1</a></td><td>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
   in a pattern string.</td></tr>
+<tr><td valign="top"><a href="#replace-3">replace/3</a></td><td>Replace All Matches.</td></tr>
 <tr><td valign="top"><a href="#save_pattern-1">save_pattern/1</a></td><td>Make save Regex pattern which make literal for any character.</td></tr>
 <tr><td valign="top"><a href="#subfilter-3">subfilter/3</a></td><td>Filter a match within another match.</td></tr>
 <tr><td valign="top"><a href="#tune-1">tune/1</a></td><td>Replace Regex pattern to more siple one.</td></tr>
@@ -233,6 +234,22 @@
   <a href="http://erlang.org/doc/man/lists.html#foldl_3" target="_top">lists:foldl/3</a>.
   <br>
   Don't apply <code>\w</code> shorthand to unicode content.</p>
+
+<h3 class="function"><a name="replace-3">replace/3</a></h3>
+<div class="spec">
+<p><tt>replace(Text, Regex, Replacement) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>Regex = string() | tuple()</tt></li><li><tt>Replacement = string()</tt></li><li><tt>Result = string()</tt></li></ul></p>
+<p><tt>Text</tt>: subject string<br>
+<tt>Regex</tt>: regex pattern<br>
+<tt>Replacement</tt>: a replacement string<br>
+</p>
+<p>returns: A string</p>
+</div><p>Replace All Matches.
+  Replace all matches of the regular expression with the replacement text.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/re.html#replace_4" target="_top">re:replace/4</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="save_pattern-1">save_pattern/1</a></h3>
 <div class="spec">

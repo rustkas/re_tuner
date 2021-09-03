@@ -4,9 +4,13 @@
 
 -module(re_tuner).
 
+% Working with Regular Expressions patterns
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
-         unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2,
-		 first_part_match/2,all_match/2, filter/3, subfilter/3,match_chain/2]).
+         unicode_block/1]).
+
+% Simplify working with re module functionality 
+-export([is_match/2, is_full_match/2,first_match/2,first_match_info/2,
+		 first_part_match/2,all_match/2, filter/3, subfilter/3,match_chain/2, replace/3]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -894,3 +898,30 @@ match_chain(Text, List_MP) when is_tuple(hd(List_MP)) ->
 	      MP_Fun(MainMatchResult, RestMP)
     end,        		
     Result.	
+
+%% @doc Replace All Matches.
+%% Replace all matches of the regular expression with the replacement text.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/re.html#replace_4 re:replace/4].
+%% @param Text subject string
+%% @param Regex regex pattern
+%% @param Replacement a replacement string
+%% @returns A string
+%% @see re_tuner:mp/1
+
+-spec replace(Text, Regex, Replacement) -> Result
+    when Text :: string(),
+	     Regex :: string() | tuple(),
+		 Replacement :: string(),
+         Result :: string().
+		 
+replace(Text, Regex, Replacement) when is_list(Regex)->
+    MP = re_tuner:mp(Regex),
+	case MP of
+	   {error, _} -> Text;
+	    _ -> replace(Text, MP, Replacement)
+	end;
+replace(Text, MP, Replacement) when is_tuple(MP)->    
+	Result = re:replace(Text, MP, Replacement,[{return, list}]),
+    Result.

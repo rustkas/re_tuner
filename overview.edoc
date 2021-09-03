@@ -1,2 +1,4 @@
 @author Anatolii Kosorukov <java1cprog@yandex.ru> [rustkas.github.io/]
-@doc Erlang. Library for tuning Regular Expressions string.
+@doc Erlang Regular Expressions simplifyer. Functions for simplifying working with Regular Expressions.
+Overcoming the limitations of the re library, expanding its capabilities, as well as additional functions 
+to simplify the work with regular expressions.
