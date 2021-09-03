@@ -43,7 +43,7 @@ EUnit
 	$ rebar3 eunit -m all_match_tests
 	$ rebar3 eunit -m filter_tests
 	$ rebar3 eunit -m subfilter_tests
-
+    $ rebar3 eunit -m match_chain_tests
 
 EDoc
 -----

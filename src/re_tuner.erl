@@ -6,7 +6,7 @@
 
 -export([tune/1, avoid_characters/0, save_pattern/1, replace/1, mp/1, mp/2,
          unicode_block/1, is_match/2, is_full_match/2,first_match/2,first_match_info/2,
-		 first_part_match/2,all_match/2, filter/3, subfilter/3]).
+		 first_part_match/2,all_match/2, filter/3, subfilter/3,match_chain/2]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -135,6 +135,9 @@ save_pattern(Pattern) ->
 %% @doc Replace one of shorthand pattern from the list `[\s,\w,\h,v]'
 %% in a pattern string.
 %% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/lists.html#foldl_3 lists:foldl/3].
+%% <br/>
 %% Don't apply `\w' shorthand to unicode content.
 %% @param Pattern searched regex pattern for replacing
 %% @returns Updated Regex pattern string
@@ -229,7 +232,8 @@ replace(Pattern) ->
 %% Return opaque data type containing a compiled regular expression or raise an error `badarg'.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#type-mp mp()].
+%% [http://erlang.org/doc/man/re.html#type-mp mp()],
+%% [http://erlang.org/doc/man/re.html#compile_1 re:compile/1].
 %% @param Regex regex pattern
 %% @returns Opaque data type containing a compiled regular expression
 
@@ -248,7 +252,8 @@ mp(Regex) ->
 %% Return opaque data type containing a compiled regular expression or raise an error `badarg'.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#type-mp mp()].
+%% [http://erlang.org/doc/man/re.html#type-mp mp()],
+%% [http://erlang.org/doc/man/re.html#compile_2 re:compile/2].
 %% @param Regex regex pattern
 %% @param Options additional regular expression metadata
 %% @returns Opaque data type containing a compiled regular expression
@@ -428,6 +433,9 @@ mp(Regex, Options) ->
 %% ‹U+FF00…U+FFEF \p{InHalfwidthandFullwidthForms}›
 %% ‹U+FFF0…U+FFFF \p{InSpecials}›
 %% '''
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/lists.html#kefind_3 lists:kefind/3].
 %%
 %% @param BlockName is Regular Expression block name
 %% @returns Regular Expressions range of code points
@@ -586,11 +594,11 @@ unicode_block(BlockName) ->
 %% A partial match is sufficient. 
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1].
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
 %% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @returns true or false
+%% @see re_tuner:mp/1
 
 -spec is_match(Text, ReInput) -> Result
     when Text :: string(),
@@ -614,11 +622,11 @@ is_match(Text, MP)  when is_tuple(MP) ->
 %% A partial match is not sufficient. 
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1].
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
 %% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @returns true or false
+%% @see re_tuner:mp/1
 
 -spec is_full_match(Text, ReInput) -> Result
     when Text :: string(),
@@ -644,12 +652,11 @@ is_full_match(Text, MP)  when is_tuple(MP) ->
 %% than once, you want only the first match.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1],
-%% [http://erlang.org/doc/man/re.html#run_2].
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
 %% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @returns A string as a result
+%% @see re_tuner:mp/1
 
 -spec first_match(Text, ReInput) -> Result
     when Text :: string(),
@@ -674,12 +681,11 @@ first_match(Text, MP) when is_tuple(MP) ->
 %% processing you fancy on the part of the original string matched by the regex.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1],
-%% [http://erlang.org/doc/man/re.html#run_2].
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
 %% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @returns Tuples as a result
+%% @see re_tuner:mp/1
 
 -spec first_match_info(Text, ReInput) -> Result
     when Text :: string(),
@@ -703,12 +709,11 @@ first_match_info(Text, MP) when is_tuple(MP) ->
 %% you want, you added a capturing group to your regular expression.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1],
-%% [http://erlang.org/doc/man/re.html#run_2].
-%% @param subject string
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
+%% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @returns A string
+%% @see re_tuner:mp/1
 
 -spec first_part_match(Text, ReInput) -> Result
     when Text :: string(),
@@ -732,12 +737,13 @@ first_part_match(Text, MP) when is_tuple(MP) ->
 %% you want, you added a capturing group to your regular expression.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1],
-%% [http://erlang.org/doc/man/re.html#run_2].
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3],
+%% [http://erlang.org/doc/man/erlang.html#hd_1 erlang:hd/1],
+%% [http://erlang.org/doc/man/lists.html#map_2 lists:map/2].
 %% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @returns A list
+%% @see re_tuner:mp/1
 
 -spec all_match(Text, ReInput) -> Result
     when Text :: string(),
@@ -763,13 +769,13 @@ all_match(Text, MP) when is_tuple(MP) ->
 %% a regular expression.
 %% <br/>
 %% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1],
-%% [http://erlang.org/doc/man/re.html#run_2].
+%% [http://erlang.org/doc/man/lists.html#filter_2 lists:filter/2].
 %% @param Text subject string
 %% @param Regex regex pattern
-%% @param MP compiled a regular expression
 %% @param Function filter function
 %% @returns A list
+%% @see re_tuner:mp/1
+%% @see re_tuner:all_match/2
 
 -spec filter(Text,ReInput,Function) -> Result
     when Text :: string(),
@@ -793,19 +799,17 @@ filter(Text, MP,Function) when is_tuple(MP) ->
 %% certain sections of the subject string. Another regular expression matches each of the
 %% sections in the string.
 %% <br/>
-%% <b>See also:</b>
-%% [http://erlang.org/doc/man/re.html#compile_1],
-%% [http://erlang.org/doc/man/re.html#run_2].
 %% @param Text subject string
 %% @param OuterRegex regex pattern
-%% @param OuterRegex subregex pattern
-%% @param MP compiled a regular expression
+%% @param InnerRegex subregex pattern
 %% @returns A list
+%% @see re_tuner:mp/1
+%% @see re_tuner:all_match/2
 
--spec subfilter(Text,ReInput,Function) -> Result
+-spec subfilter(Text,OuterReInput,InnerReInput) -> Result
     when Text :: string(),
-	     ReInput :: string() | tuple(),
-		 Function :: function(),
+	     OuterReInput :: string() | tuple(),
+		 InnerReInput :: string() | tuple(),
          Result :: [string()]|nomatch.
 	
 subfilter(Text, OuterRegex, InnerRegex) when is_list(OuterRegex), is_list(InnerRegex) ->
@@ -833,3 +837,60 @@ subfilter(Text, OuterMP, InnerMP) when is_tuple(OuterMP), is_tuple(InnerMP) ->
 		  Result = InnerFunction(MatchResult, []),
 	      Result
     end.
+
+%% @doc Get the matches of one Regex within the matches of another Regex.
+%% This function takes a list of Regexes.
+%% Find the matches of a Regex within the matches of another Regex, within the matches 
+%% of other Regexes, as many levels deep as you want.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/lists.html#map_2 lists:map/2].
+%% @param Text subject string
+%% @param ReList regex list
+%% @returns A list
+%% @see re_tuner:mp/1
+%% @see re_tuner:all_match/2
+
+-spec match_chain(Text,ReList) -> Result
+    when Text :: string(),
+	     ReList :: [string()] | [tuple()],
+         Result :: [string()]|nomatch.
+		 
+match_chain(Text, ListRegex) when is_list(hd(ListRegex)) ->
+    List_MP = lists:map(fun(Regex)-> 
+	  re_tuner:mp(Regex)
+	end, ListRegex),
+	
+	Result = match_chain(Text, List_MP),
+	Result;
+match_chain(Text, List_MP) when is_tuple(hd(List_MP)) ->
+    
+    [HeadMP|RestMP] = List_MP,	   
+	MainMatchResult = re_tuner:all_match(Text, HeadMP),
+	Result = case MainMatchResult of 
+        nomatch -> nomatch;
+        _ -> 
+	        FindFun = fun Fun(MP, StringList, AccList)-> 
+	          case StringList of 
+		          [] -> AccList;
+		          _ -> 
+	                  [Head|Rest] = StringList,
+		              case re_tuner:all_match(Head, MP) of
+                          nomatch -> Fun(MP, Rest, AccList);
+			              InnerMatchResult -> 
+				              NewList = AccList ++ InnerMatchResult,
+				              Fun(MP, Rest, NewList)
+                      end % case
+		     end % case
+	        end, % fun
+	        MP_Fun = fun Fun(StringList, ListMP) ->
+		      case ListMP of 
+			     [] -> StringList;
+				 [Head|Rest] ->
+		             MP_Result = FindFun(Head, StringList, []),
+					 Fun(MP_Result, Rest)
+			  end % case
+	      end, % fun
+	      MP_Fun(MainMatchResult, RestMP)
+    end,        		
+    Result.	

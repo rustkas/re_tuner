@@ -39,6 +39,7 @@
 <tr><td valign="top"><a href="#first_part_match-2">first_part_match/2</a></td><td>Retrieve Part of the Matched Text.</td></tr>
 <tr><td valign="top"><a href="#is_full_match-2">is_full_match/2</a></td><td>Check whether a string fits a certain pattern in its entirety.</td></tr>
 <tr><td valign="top"><a href="#is_match-2">is_match/2</a></td><td>Check whether a match can be found for a particular regular expression in a particular string.</td></tr>
+<tr><td valign="top"><a href="#match_chain-2">match_chain/2</a></td><td>Get the matches of one Regex within the matches of another Regex.</td></tr>
 <tr><td valign="top"><a href="#mp-1">mp/1</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#mp-2">mp/2</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#replace-1">replace/1</a></td><td>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
@@ -64,8 +65,10 @@
   you want, you added a capturing group to your regular expression.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
-  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>,
+  <a href="http://erlang.org/doc/man/erlang.html#hd_1" target="_top">erlang:hd/1</a>,
+  <a href="http://erlang.org/doc/man/lists.html#map_2" target="_top">lists:map/2</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="avoid_characters-0">avoid_characters/0</a></h3>
 <div class="spec">
@@ -90,8 +93,8 @@
   a regular expression.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
-  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/lists.html#filter_2" target="_top">lists:filter/2</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#all_match-2">re_tuner:all_match/2</a>, <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="first_match-2">first_match/2</a></h3>
 <div class="spec">
@@ -106,8 +109,8 @@
   than once, you want only the first match.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
-  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="first_match_info-2">first_match_info/2</a></h3>
 <div class="spec">
@@ -123,14 +126,15 @@
   processing you fancy on the part of the original string matched by the regex.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
-  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="first_part_match-2">first_part_match/2</a></h3>
 <div class="spec">
 <p><tt>first_part_match(Text, ReInput) -&gt; Result</tt>
 <ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Result = string() | nomatch</tt></li></ul></p>
-<p> </p>
+<p><tt>Text</tt>: subject string<br>
+</p>
 <p>returns: A string</p>
 </div><p>Retrieve Part of the Matched Text.
   You have a regular expression that matches a substring of the subject text.
@@ -138,8 +142,8 @@
   you want, you added a capturing group to your regular expression.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
-  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="is_full_match-2">is_full_match/2</a></h3>
 <div class="spec">
@@ -152,7 +156,8 @@
   A partial match is not sufficient.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="is_match-2">is_match/2</a></h3>
 <div class="spec">
@@ -165,7 +170,25 @@
   A partial match is sufficient.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
+
+<h3 class="function"><a name="match_chain-2">match_chain/2</a></h3>
+<div class="spec">
+<p><tt>match_chain(Text, ReList) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReList = [string()] | [tuple()]</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
+<p><tt>Text</tt>: subject string<br>
+<tt>ReList</tt>: regex list<br>
+</p>
+<p>returns: A list</p>
+</div><p>Get the matches of one Regex within the matches of another Regex.
+  This function takes a list of Regexes.
+  Find the matches of a Regex within the matches of another Regex, within the matches
+  of other Regexes, as many levels deep as you want.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/lists.html#map_2" target="_top">lists:map/2</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#all_match-2">re_tuner:all_match/2</a>, <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="mp-1">mp/1</a></h3>
 <div class="spec">
@@ -178,7 +201,8 @@
   Return opaque data type containing a compiled regular expression or raise an error <code>badarg</code>.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#type-mp" target="_top">mp()</a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#type-mp" target="_top">mp()</a>,
+  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top">re:compile/1</a>.</p>
 
 <h3 class="function"><a name="mp-2">mp/2</a></h3>
 <div class="spec">
@@ -192,7 +216,8 @@
   Return opaque data type containing a compiled regular expression or raise an error <code>badarg</code>.
   <br>
   <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#type-mp" target="_top">mp()</a>.</p>
+  <a href="http://erlang.org/doc/man/re.html#type-mp" target="_top">mp()</a>,
+  <a href="http://erlang.org/doc/man/re.html#compile_2" target="_top">re:compile/2</a>.</p>
 
 <h3 class="function"><a name="replace-1">replace/1</a></h3>
 <div class="spec">
@@ -203,6 +228,9 @@
 <p>returns: Updated Regex pattern string</p>
 </div><p>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
   in a pattern string.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/lists.html#foldl_3" target="_top">lists:foldl/3</a>.
   <br>
   Don't apply <code>\w</code> shorthand to unicode content.</p>
 
@@ -216,8 +244,8 @@
 
 <h3 class="function"><a name="subfilter-3">subfilter/3</a></h3>
 <div class="spec">
-<p><tt>subfilter(Text, ReInput, Function) -&gt; Result</tt>
-<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>ReInput = string() | tuple()</tt></li><li><tt>Function = function()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
+<p><tt>subfilter(Text, OuterReInput, InnerReInput) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>OuterReInput = string() | tuple()</tt></li><li><tt>InnerReInput = string() | tuple()</tt></li><li><tt>Result = [string()] | nomatch</tt></li></ul></p>
 <p><tt>Text</tt>: subject string<br>
 </p>
 <p>returns: A list</p>
@@ -225,10 +253,8 @@
   Find all the matches of a particular regular expression, but only within
   certain sections of the subject string. Another regular expression matches each of the
   sections in the string.
-  <br>
-  <b>See also:</b>
-  <a href="http://erlang.org/doc/man/re.html#compile_1" target="_top"><tt>http://erlang.org/doc/man/re.html#compile_1</tt></a>,
-  <a href="http://erlang.org/doc/man/re.html#run_2" target="_top"><tt>http://erlang.org/doc/man/re.html#run_2</tt></a>.</p>
+  <br></p>
+<p><b>See also:</b> <a href="re_tuner.html#all_match-2">re_tuner:all_match/2</a>, <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
 <h3 class="function"><a name="tune-1">tune/1</a></h3>
 <div class="spec">
@@ -405,6 +431,9 @@
   ‹U+FE70…U+FEFF \p{InArabicPresentationForms-B}›
   ‹U+FF00…U+FFEF \p{InHalfwidthandFullwidthForms}›
   ‹U+FFF0…U+FFFF \p{InSpecials}›</pre>
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/lists.html#kefind_3" target="_top">lists:kefind/3</a>.
  </p>
 <hr>
 
