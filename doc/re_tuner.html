@@ -40,6 +40,7 @@
 <tr><td valign="top"><a href="#is_full_match-2">is_full_match/2</a></td><td>Check whether a string fits a certain pattern in its entirety.</td></tr>
 <tr><td valign="top"><a href="#is_match-2">is_match/2</a></td><td>Check whether a match can be found for a particular regular expression in a particular string.</td></tr>
 <tr><td valign="top"><a href="#match_chain-2">match_chain/2</a></td><td>Get the matches of one Regex within the matches of another Regex.</td></tr>
+<tr><td valign="top"><a href="#match_evaluator-3">match_evaluator/3</a></td><td>Replace Matches with Replacements Generated in Code.</td></tr>
 <tr><td valign="top"><a href="#mp-1">mp/1</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#mp-2">mp/2</a></td><td>It is reduced form of <code>re:compile/1</code> function.</td></tr>
 <tr><td valign="top"><a href="#replace-1">replace/1</a></td><td>Replace one of shorthand pattern from the list <code>[\s,\w,\h,v]</code>
@@ -191,9 +192,31 @@
   <a href="http://erlang.org/doc/man/lists.html#map_2" target="_top">lists:map/2</a>.</p>
 <p><b>See also:</b> <a href="re_tuner.html#all_match-2">re_tuner:all_match/2</a>, <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
+<h3 class="function"><a name="match_evaluator-3">match_evaluator/3</a></h3>
+<div class="spec">
+<p><tt>match_evaluator(DoAction, Text, Regex) -&gt; Result</tt>
+<ul class="definitions"><li><tt>DoAction = function()</tt></li><li><tt>Text = string()</tt></li><li><tt>Regex = string() | tuple()</tt></li><li><tt>Result = string()</tt></li></ul></p>
+<p><tt>DoAction</tt>: a spec - <code>function(InputString)-&gt; NewString</code><br>
+<tt>Text</tt>: subject string<br>
+<tt>Regex</tt>: regex pattern<br>
+</p>
+<p>returns: A string</p>
+</div><p>Replace Matches with Replacements Generated in Code.
+  Replace all matches of a regular expression with a new string that you build
+  up in procedural code. You want to be able to replace each match with a different string,
+  based on the text that was actually matched.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/erlang.html#element_2" target="_top">erlang:element/2</a>,
+  <a href="http://erlang.org/doc/man/string.html#slice_3" target="_top">string:slice/3</a>,
+  <a href="http://erlang.org/doc/man/string.html#length_1" target="_top">string:length/1</a>,
+  <a href="http://erlang.org/doc/man/re.html#replace_4" target="_top">re:replace/4</a>,
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
+
 <h3 class="function"><a name="mp-1">mp/1</a></h3>
 <div class="spec">
-<p><tt>mp(Regex) -&gt; MP | {error, badarg}</tt>
+<p><tt>mp(Regex) -&gt; MP | {error, tuple()}</tt>
 <ul class="definitions"><li><tt>Regex = string()</tt></li><li><tt>MP = <a href="#type-mp">mp()</a></tt></li></ul></p>
 <p><tt>Regex</tt>: regex pattern<br>
 </p>

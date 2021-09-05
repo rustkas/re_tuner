@@ -10,7 +10,8 @@
 
 % Simplify working with re module functionality 
 -export([is_match/2, is_full_match/2,first_match/2,first_match_info/2,
-		 first_part_match/2,all_match/2, filter/3, subfilter/3,match_chain/2, replace/3]).
+		 first_part_match/2,all_match/2, filter/3, subfilter/3,match_chain/2, replace/3,
+		 match_evaluator/3]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -241,15 +242,15 @@ replace(Pattern) ->
 %% @param Regex regex pattern
 %% @returns Opaque data type containing a compiled regular expression
 
--spec mp(Regex) -> MP | {error, badarg}
+-spec mp(Regex) -> MP | {error, tuple()}
     when Regex :: string(),
          MP :: mp().
 mp(Regex) ->
     case re:compile(Regex) of
         {ok, MP} ->
             MP;
-        {error, _ErrSpec} ->
-            error(badarg)
+        {error, ErrSpec} ->
+            error(ErrSpec)
     end.
 
 %% @doc It is reduced form of `re:compile/1' function.
@@ -611,8 +612,9 @@ unicode_block(BlockName) ->
 		 
 is_match(Text, Regex) when is_list(Regex) ->
    try 
-      MP = re_tuner:mp(Regex),
-	  is_match(Text, MP)  
+      re_tuner:mp(Regex)
+   of
+      MP -> is_match(Text, MP)
    catch
       error:_Error -> false
    end;
@@ -862,7 +864,7 @@ subfilter(Text, OuterMP, InnerMP) when is_tuple(OuterMP), is_tuple(InnerMP) ->
 		 
 match_chain(Text, ListRegex) when is_list(hd(ListRegex)) ->
     List_MP = lists:map(fun(Regex)-> 
-	  re_tuner:mp(Regex)
+	              re_tuner:mp(Regex)
 	end, ListRegex),
 	
 	Result = match_chain(Text, List_MP),
@@ -917,11 +919,81 @@ match_chain(Text, List_MP) when is_tuple(hd(List_MP)) ->
          Result :: string().
 		 
 replace(Text, Regex, Replacement) when is_list(Regex)->
-    MP = re_tuner:mp(Regex),
-	case MP of
-	   {error, _} -> Text;
-	    _ -> replace(Text, MP, Replacement)
+    try
+	    re_tuner:mp(Regex)
+	of
+	    MP -> replace(Text, MP, Replacement)
+	catch
+	    {error, _} -> Text
 	end;
 replace(Text, MP, Replacement) when is_tuple(MP)->    
 	Result = re:replace(Text, MP, Replacement,[{return, list}]),
     Result.
+	
+-spec match_evaluator(DoAction, Text, Regex) -> Result
+   when DoAction :: function(),
+        Text :: string(),
+		Regex :: string()|tuple(),
+		Result :: string().
+
+%% @doc Replace Matches with Replacements Generated in Code.
+%% Replace all matches of a regular expression with a new string that you build
+%% up in procedural code. You want to be able to replace each match with a different string,
+%% based on the text that was actually matched.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/erlang.html#element_2 erlang:element/2],
+%% [http://erlang.org/doc/man/string.html#slice_3 string:slice/3],
+%% [http://erlang.org/doc/man/string.html#length_1 string:length/1],
+%% [http://erlang.org/doc/man/re.html#replace_4 re:replace/4],
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
+%% @param DoAction a spec - `function(InputString)-> NewString'
+%% @param Text subject string
+%% @param Regex regex pattern
+%% @returns A string
+%% @see re_tuner:mp/1
+
+match_evaluator(DoAction, Text, Regex)  when is_list(Regex) ->
+	Result = try
+	    re_tuner:mp(Regex)
+	of
+	    MP -> match_evaluator(DoAction, Text, MP)
+    catch
+	    error:_ -> Text
+	end,	
+	Result;
+match_evaluator(DoAction, Text, MP) when is_tuple(MP)->    
+	ReplaceFun = fun(FullString, MatchResult)->
+	  Index = element(1,MatchResult),
+	  Length = element(2,MatchResult),
+	  Offset = Index + Length,
+	  SubString = string:slice(FullString, Index, Length),
+      
+	  NewSubString = DoAction(SubString),
+	  
+	  NewOffset = Index + string:length(NewSubString),
+	  FullStringLength = string:length(FullString),
+	  NewString = string:slice(FullString, 0, Index) ++ NewSubString 
+	  ++ string:slice(FullString, Offset, FullStringLength - Offset ),
+	  {NewString, NewOffset}
+	end,
+
+	MatchEvaluationFun = fun MatchEvaluator(FullString, EvaluationMP, Offset) ->
+	    RunResult = re:run(FullString, EvaluationMP,[{capture,first,index},{offset, Offset}]),
+		RunResultCheck = case RunResult of
+	        nomatch -> FullString;
+	        {match,[MatchResult]} -> ReplaceFun(FullString,MatchResult)
+	    end,
+		MatchEvaluationResult = case is_tuple(RunResultCheck) of
+		    true -> 
+			     {NewString, NewOffset} = RunResultCheck,
+				 MatchEvaluator(NewString, EvaluationMP, NewOffset);
+			_ -> RunResultCheck
+        end,
+	    MatchEvaluationResult
+    end,
+	
+	StartOffset = 0,
+	Result = MatchEvaluationFun(Text,MP,StartOffset),
+	Result.
+	

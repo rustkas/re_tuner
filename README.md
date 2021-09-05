@@ -45,6 +45,7 @@ EUnit
 	$ rebar3 eunit -m subfilter_tests
     $ rebar3 eunit -m match_chain_tests
 	$ rebar3 eunit -m replace3_tests
+	$ rebar3 eunit -m match_evaluator_tests
 
 EDoc
 -----
