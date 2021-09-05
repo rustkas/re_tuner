@@ -929,9 +929,12 @@ replace(Text, Regex, Replacement) when is_list(Regex)->
 replace(Text, MP, Replacement) when is_tuple(MP)->    
 	Result = re:replace(Text, MP, Replacement,[{return, list}]),
     Result.
-	
+
+-type do_action() :: fun((InputString :: string()) -> (NewString :: string())).
+
 -spec match_evaluator(DoAction, Text, Regex) -> Result
-   when DoAction :: function(),
+   when 
+		DoAction :: do_action(),
         Text :: string(),
 		Regex :: string()|tuple(),
 		Result :: string().
