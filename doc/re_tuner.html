@@ -22,6 +22,10 @@
 <p><tt>compile_option() = unicode | anchored | caseless | dollar_endonly | dotall | extended | firstline | multiline | no_auto_capture | dupnames | ungreedy | {newline, <a href="#type-nl_spec">nl_spec()</a>} | bsr_anycrlf | bsr_unicode | no_start_optimize | ucp | never_utf</tt></p>
 
 
+<h3 class="typedecl"><a name="type-do_action">do_action()</a></h3>
+<p><tt>do_action() = fun((InputString::string()) -&gt; NewString::string())</tt></p>
+
+
 <h3 class="typedecl"><a name="type-mp">mp()</a></h3>
 <p><tt>mp() = {re_pattern, term(), term(), term(), term()}</tt></p>
 
@@ -48,6 +52,7 @@
 <tr><td valign="top"><a href="#replace-3">replace/3</a></td><td>Replace All Matches.</td></tr>
 <tr><td valign="top"><a href="#save_pattern-1">save_pattern/1</a></td><td>Make save Regex pattern which make literal for any character.</td></tr>
 <tr><td valign="top"><a href="#subfilter-3">subfilter/3</a></td><td>Filter a match within another match.</td></tr>
+<tr><td valign="top"><a href="#submatch_evaluator-4">submatch_evaluator/4</a></td><td>Replace All Matches Within the Matches of Another Regex.</td></tr>
 <tr><td valign="top"><a href="#tune-1">tune/1</a></td><td>Replace Regex pattern to more siple one.</td></tr>
 <tr><td valign="top"><a href="#unicode_block-1">unicode_block/1</a></td><td>The Unicode character database divides all the code points into blocks.</td></tr>
 </table>
@@ -195,7 +200,7 @@
 <h3 class="function"><a name="match_evaluator-3">match_evaluator/3</a></h3>
 <div class="spec">
 <p><tt>match_evaluator(DoAction, Text, Regex) -&gt; Result</tt>
-<ul class="definitions"><li><tt>DoAction = function()</tt></li><li><tt>Text = string()</tt></li><li><tt>Regex = string() | tuple()</tt></li><li><tt>Result = string()</tt></li></ul></p>
+<ul class="definitions"><li><tt>DoAction = <a href="#type-do_action">do_action()</a></tt></li><li><tt>Text = string()</tt></li><li><tt>Regex = string() | tuple()</tt></li><li><tt>Result = string()</tt></li></ul></p>
 <p><tt>DoAction</tt>: a spec - <code>function(InputString)-&gt; NewString</code><br>
 <tt>Text</tt>: subject string<br>
 <tt>Regex</tt>: regex pattern<br>
@@ -210,7 +215,6 @@
   <a href="http://erlang.org/doc/man/erlang.html#element_2" target="_top">erlang:element/2</a>,
   <a href="http://erlang.org/doc/man/string.html#slice_3" target="_top">string:slice/3</a>,
   <a href="http://erlang.org/doc/man/string.html#length_1" target="_top">string:length/1</a>,
-  <a href="http://erlang.org/doc/man/re.html#replace_4" target="_top">re:replace/4</a>,
   <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
 <p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
 
@@ -295,6 +299,28 @@
   sections in the string.
   <br></p>
 <p><b>See also:</b> <a href="re_tuner.html#all_match-2">re_tuner:all_match/2</a>, <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>.</p>
+
+<h3 class="function"><a name="submatch_evaluator-4">submatch_evaluator/4</a></h3>
+<div class="spec">
+<p><tt>submatch_evaluator(Text, OuterRegex, InnerRegex, Replacement) -&gt; Result</tt>
+<ul class="definitions"><li><tt>Text = string()</tt></li><li><tt>OuterRegex = string() | tuple()</tt></li><li><tt>InnerRegex = string() | tuple()</tt></li><li><tt>Replacement = string()</tt></li><li><tt>Result = string()</tt></li></ul></p>
+<p><tt>Text</tt>: subject string<br>
+<tt>OuterRegex</tt>: outer regex pattern<br>
+<tt>InnerRegex</tt>: inner regex pattern<br>
+<tt>Replacement</tt>: a replacement string<br>
+</p>
+<p>returns: A string</p>
+</div><p>Replace All Matches Within the Matches of Another Regex.
+  Replace all the matches of a particular regular expression, but only within
+  certain sections of the subject string. Another regular expression matches each of the
+  sections in the string.
+  <br>
+  <b>See also:</b>
+  <a href="http://erlang.org/doc/man/erlang.html#element_2" target="_top">erlang:element/2</a>,
+  <a href="http://erlang.org/doc/man/string.html#slice_3" target="_top">string:slice/3</a>,
+  <a href="http://erlang.org/doc/man/string.html#length_1" target="_top">string:length/1</a>,
+  <a href="http://erlang.org/doc/man/re.html#run_3" target="_top">re:run/3</a>.</p>
+<p><b>See also:</b> <a href="re_tuner.html#mp-1">re_tuner:mp/1</a>, <a href="re_tuner.html#replace-3">re_tuner:replace/3</a>.</p>
 
 <h3 class="function"><a name="tune-1">tune/1</a></h3>
 <div class="spec">

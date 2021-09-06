@@ -11,7 +11,7 @@
 % Simplify working with re module functionality 
 -export([is_match/2, is_full_match/2,first_match/2,first_match_info/2,
 		 first_part_match/2,all_match/2, filter/3, subfilter/3,match_chain/2, replace/3,
-		 match_evaluator/3]).
+		 match_evaluator/3, submatch_evaluator/4]).
 
 -type mp() :: {re_pattern, term(), term(), term(), term()}.
 -type nl_spec() :: cr | crlf | lf | anycrlf | any.
@@ -620,7 +620,8 @@ is_match(Text, Regex) when is_list(Regex) ->
    end;
 
 is_match(Text, MP)  when is_tuple(MP) ->
-	MatchResult = re:run(Text, MP, [{capture,none}]),
+	SanitizedText = sanitize_text(Text),
+	MatchResult = re:run(SanitizedText, MP, [{capture,none}]),
 	Result = (MatchResult == match),
 	Result.
 
@@ -648,7 +649,8 @@ is_full_match(Text, Regex) when is_list(Regex) ->
    end;
 
 is_full_match(Text, MP)  when is_tuple(MP) ->
-	MatchResult = re:run(Text, MP, [{capture,none}]),
+	SanitizedText = sanitize_text(Text),
+	MatchResult = re:run(SanitizedText, MP, [{capture,none}]),
 	Result = (MatchResult == match),
 	Result.	
 
@@ -674,7 +676,8 @@ first_match(Text,Regex) when is_list(Regex) ->
 	Result = first_match(Text, MP),
 	Result;
 first_match(Text, MP) when is_tuple(MP) ->
-	Result = case re:run(Text, MP, [{capture, first, list}]) of 
+	SanitizedText = sanitize_text(Text),
+	Result = case re:run(SanitizedText, MP, [{capture, first, list}]) of 
 	    {match, [RunResult]} -> RunResult;
 		nomatch -> nomatch
 	end,	
@@ -703,7 +706,8 @@ first_match_info(Text,Regex) when is_list(Regex) ->
 	Result = first_match_info(Text, MP),
 	Result;
 first_match_info(Text, MP) when is_tuple(MP) ->
-	Result = case re:run(Text, MP, [{capture, first, index}]) of 
+	SanitizedText = sanitize_text(Text),
+	Result = case re:run(SanitizedText, MP, [{capture, first, index}]) of 
 	    {match, [RunResult]} -> RunResult;
 		nomatch -> nomatch
 	end,
@@ -731,7 +735,8 @@ first_part_match(Text,Regex) when is_list(Regex) ->
 	Result = first_part_match(Text, MP),
 	Result;
 first_part_match(Text, MP) when is_tuple(MP) ->
-	Result = case re:run(Text, MP, [{capture, [1], list}]) of 
+	SanitizedText = sanitize_text(Text),
+	Result = case re:run(SanitizedText, MP, [{capture, [1], list}]) of 
 	    {match, [RunResult]} -> RunResult;
 		nomatch -> nomatch
 	end,	
@@ -762,7 +767,8 @@ all_match(Text,Regex) when is_list(Regex) ->
 	Result = all_match(Text, MP),
 	Result;
 all_match(Text, MP) when is_tuple(MP) ->
-	Result = case re:run(Text, MP, [global,{capture,first,list}]) of 
+	SanitizedText = sanitize_text(Text),
+	Result = case re:run(SanitizedText, MP, [global,{capture,first,list}]) of 
 	    {match, MatchResult} -> lists:map(fun(Elem)-> hd(Elem) end, MatchResult);
 		nomatch -> nomatch
 	end,	
@@ -927,7 +933,8 @@ replace(Text, Regex, Replacement) when is_list(Regex)->
 	    {error, _} -> Text
 	end;
 replace(Text, MP, Replacement) when is_tuple(MP)->    
-	Result = re:replace(Text, MP, Replacement,[{return, list}]),
+	SanitizedText = sanitize_text(Text),
+	Result = re:replace(SanitizedText, MP, Replacement,[global,{return, list}]),
     Result.
 
 -type do_action() :: fun((InputString :: string()) -> (NewString :: string())).
@@ -948,7 +955,6 @@ replace(Text, MP, Replacement) when is_tuple(MP)->
 %% [http://erlang.org/doc/man/erlang.html#element_2 erlang:element/2],
 %% [http://erlang.org/doc/man/string.html#slice_3 string:slice/3],
 %% [http://erlang.org/doc/man/string.html#length_1 string:length/1],
-%% [http://erlang.org/doc/man/re.html#replace_4 re:replace/4],
 %% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
 %% @param DoAction a spec - `function(InputString)-> NewString'
 %% @param Text subject string
@@ -966,6 +972,7 @@ match_evaluator(DoAction, Text, Regex)  when is_list(Regex) ->
 	end,	
 	Result;
 match_evaluator(DoAction, Text, MP) when is_tuple(MP)->    
+	SanitizedText = sanitize_text(Text),
 	ReplaceFun = fun(FullString, MatchResult)->
 	  Index = element(1,MatchResult),
 	  Length = element(2,MatchResult),
@@ -997,6 +1004,93 @@ match_evaluator(DoAction, Text, MP) when is_tuple(MP)->
     end,
 	
 	StartOffset = 0,
-	Result = MatchEvaluationFun(Text,MP,StartOffset),
+	Result = MatchEvaluationFun(SanitizedText,MP,StartOffset),
 	Result.
+
+
+-spec submatch_evaluator(Text, OuterRegex, InnerRegex, Replacement) -> Result
+   when 
+        Text :: string(),
+		OuterRegex :: string()|tuple(),
+		InnerRegex :: string()|tuple(),
+		Replacement :: string(),
+		Result :: string().
+
+%% @doc Replace All Matches Within the Matches of Another Regex.
+%% Replace all the matches of a particular regular expression, but only within
+%% certain sections of the subject string. Another regular expression matches each of the
+%% sections in the string.
+%% <br/>
+%% <b>See also:</b>
+%% [http://erlang.org/doc/man/erlang.html#element_2 erlang:element/2],
+%% [http://erlang.org/doc/man/string.html#slice_3 string:slice/3],
+%% [http://erlang.org/doc/man/string.html#length_1 string:length/1],
+%% [http://erlang.org/doc/man/re.html#run_3 re:run/3].
+%% @param Text subject string
+%% @param OuterRegex outer regex pattern
+%% @param InnerRegex inner regex pattern
+%% @param Replacement a replacement string 
+%% @returns A string
+%% @see re_tuner:mp/1
+%% @see re_tuner:replace/3
+
+submatch_evaluator(Text, OuterRegex, InnerRegex, Replacement)  when is_list(OuterRegex), is_list(InnerRegex) ->
+	Result = try
+	    MP = re_tuner:mp(OuterRegex),
+		InnerMP = re_tuner:mp(InnerRegex),
+	    submatch_evaluator(Text, MP, InnerMP, Replacement)
+	of
+	    TryResult -> TryResult	
+    catch
+	    error:_ -> Text
+	end,	
+	Result;
 	
+submatch_evaluator(Text, MP, InnerMP, InnerReplacement) when is_tuple(MP), is_tuple(InnerMP)-> 
+	SanitizedText = sanitize_text(Text),
+	DoAction = fun(DoActionText, DoActionMP, DoActionReplacement) ->
+	    Result = re_tuner:replace(DoActionText, DoActionMP, DoActionReplacement),
+		Result
+	end,
+	
+	
+	ReplaceFun = fun(FullString, MatchResult) ->
+	  Index = element(1,MatchResult),
+	  Length = element(2,MatchResult),
+	  Offset = Index + Length,
+	  SubString = string:slice(FullString, Index, Length),
+	  NewSubString = DoAction(SubString,InnerMP,InnerReplacement),
+	  NewOffset = Index + string:length(NewSubString),
+	  FullStringLength = string:length(FullString),
+	  NewString = string:slice(FullString, 0, Index) ++ NewSubString 
+	  ++ string:slice(FullString, Offset, FullStringLength - Offset ),
+	  {NewString, NewOffset}
+	end,
+
+	MatchEvaluationFun = fun MatchEvaluator(FullString, EvaluationMP, Offset) ->
+	    RunResult = re:run(FullString, EvaluationMP,[{capture,first,index},{offset, Offset}]),
+		RunResultCheck = case RunResult of
+	        nomatch -> FullString;
+	        {match,[MatchResult]} -> ReplaceFun(FullString,MatchResult)
+	    end,
+		MatchEvaluationResult = case is_tuple(RunResultCheck) of
+		    true -> 
+			     {NewString, NewOffset} = RunResultCheck,
+				 MatchEvaluator(NewString, EvaluationMP, NewOffset);
+			_ -> RunResultCheck
+        end,
+	    MatchEvaluationResult
+    end,
+	
+	StartOffset = 0,
+	Result = MatchEvaluationFun(SanitizedText,MP,StartOffset),
+	Result.
+
+-spec sanitize_text(Text) -> Result
+   when 
+        Text :: string(),
+		Result :: string().
+
+sanitize_text(Text) when is_list(Text)->
+    SanitizedText = string:replace(Text, [$\r,$\n], [$\n], all),
+    SanitizedText.

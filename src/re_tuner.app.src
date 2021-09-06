@@ -1,6 +1,6 @@
 {application,re_tuner,
              [{description,"Erlang Regular Expressions simplifyer. Functions for simplifying working with Regular Expressions."},
-              {vsn,"0.1.20"},
+              {vsn,"0.1.21"},
               {registered,[]},
               {applications,[kernel,stdlib]},
               {env,[]},
